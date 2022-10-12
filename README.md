@@ -83,3 +83,5 @@ var upload = new ZAPUploader('drop-area',{
 ```
 
 ### 预览图
+![预览图](https://github.com/zapj/ZAPUploader/raw/main/screenshot.png)
+
