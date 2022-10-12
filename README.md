@@ -4,7 +4,7 @@ Uploader
 
 
 
-```
+```javascript
 var upload = new ZAPUploader('drop-area',{
         url: 'http://127.0.0.1/uploader/upload.php',
         allowedExtensions: '.jpg|.png|.jpeg',
@@ -39,7 +39,7 @@ var upload = new ZAPUploader('drop-area',{
 ```
 
 ### 上传文件
-```
+```html
 <div id="drop-area" class="zapUploader text-center " >
 
     <p>请选择要上传的图片</p>
@@ -58,7 +58,7 @@ var upload = new ZAPUploader('drop-area',{
 
 
 ### 自定义模板
-```
+```html
 <div class="zap-preview-template">
     <div class="zap-file-details align-items-center row mb-2 bg-white border">
 
