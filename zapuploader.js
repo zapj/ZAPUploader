@@ -86,14 +86,14 @@ function ZAPUploader(id,options){
     }
     var $$this = this;
     if(this.options.previewTemplate === null){
-        this.options.previewTemplate = this.createElement(`<div class="zap-file-details">
-                <img class="zap-file-thumb" />
+        this.options.previewTemplate = this.createElement(`<div><div class="zap-file-details">
+                <img class="zap-file-thumb" style="width: 100%" />
                 <span class="zap-file-name"></span><br/>
                 <span class="zap-file-size"></span><br/>
                 <span class="zap-file-progress"></span>
                 <div class="zap-file-success-mark"><span>✔</span></div>
                 <div class="zap-file-error-mark"><span>✘</span></div>
-            </div>`);
+            </div></div>`);
     }else if(typeof this.options.previewTemplate === 'string'){
         this.options.previewTemplate = this.createElement(this.options.previewTemplate);
     }
