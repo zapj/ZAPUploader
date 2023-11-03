@@ -16,7 +16,7 @@ var upload = new ZAPUploader('drop-area',{
         previewTemplate:document.querySelector('.zap-preview-template'),
         success:function(i,response){
             console.log(i,response)
-        }
+        },
         processing:function(file){
              // console.log("processing",file);
         },
@@ -27,11 +27,11 @@ var upload = new ZAPUploader('drop-area',{
         progress:function(total,fileNumber,percent,ff){        
              // ff.querySelector('.zap-file-size').innerHTML = '已完成' + percent.toFixed(2);
         },
-        addfile:function(){
-            console.log('addfile',this);
-        }
-
-        // directoryUpload:true, //upload dir
+        addfile:function(file){
+            //console.log('addfile',file);
+        },
+        addedfile:function(file,index){}
+        // directoryUpload:true, //upload dir  上传目录需要手动调用startUpload();
         // progress:function(percent){
         //     $('.progress-bar').css('width',percent + '%');
         // }
@@ -77,11 +77,12 @@ var upload = new ZAPUploader('drop-area',{
         </div>
 
     </div>
-    <div class="zap-file-success-mark"><i class="fa fa-check-circle"></i></div>
+    <div class="zap-file-success-mark"><i class="fa fa-check-circle"></i> or <span>✔</span></div>
     <div class="zap-file-error-mark"><span>✘</span></div>
 </div>
 ```
 
 ### 预览图
 ![预览图](https://raw.githubusercontent.com/zapj/ZAPUploader/main/screenshot.png)
+![预览图](https://raw.githubusercontent.com/zapj/ZAPUploader/main/dir-upload.png)
 

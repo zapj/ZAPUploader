@@ -18,8 +18,8 @@ function ZAPUploader(id,options){
         chunking:false,
         chunkSize:5000000,
         maxFileSize:null, //MB
-        previewContainer:'.zap-preview',
-        messageContainer:'.zap-message',
+        previewContainer:null,
+        messageContainer:null,
         maxFiles:0, //最大上传文件数量
         headers: {},
         customFormData:{},
@@ -59,37 +59,44 @@ function ZAPUploader(id,options){
             $$this.messageContainer.appendChild(strong)
         },
         addedfile:function(file,index){},
-        addfile:function(){
-
-        },
-        preview:function(file,index){
-
-        }
+        addfile:function(file){},
+        preview:function(file,index){}
     };
     if(typeof options !== 'undefined'){
         for (const name in options) {
             this.options[name] = options[name];
         }
     }
-
-    var $$this = this;
-    this.dropArea = document.getElementById(id);
+    if(typeof id === "string" && id[0] === '#'){
+        this.dropArea = document.querySelector(id);
+    }else if(typeof id === "string" && id[0] === '.'){
+        var nodeList = document.querySelectorAll(id);
+        nodeList.forEach((value,key)=>{
+            if(key===0){
+                this.dropArea = value;
+            }else{
+                new ZAPUploader(value,options);
+            }
+        })
+    }else if(typeof id === "object"){
+        this.dropArea = id;
+    }
     if(this.dropArea === null){
         throw new Error('绑定 ID#'+id+' 失败!');
     }
-    if(typeof options.previewTemplate === null){
-        options.previewTemplate = this.createElement('<div class="zap-file-details">\n' +
-            '    <img class="zap-file-thumb" />\n' +
-            '    <span class="zap-file-name"></span><br/>\n' +
-            '    <span class="zap-file-size"></span><br/>\n' +
-            '    <span class="zap-file-progress"></span>\n' +
-            '    <div class="zap-file-success-mark"><span>✔</span></div>\n' +
-            '    <div class="zap-file-error-mark"><span>✘</span></div>   \n' +
-            '</div>');
-    }else if(typeof options.previewTemplate === 'string'){
-        options.previewTemplate = this.createElement(options.previewTemplate);
+    var $$this = this;
+    if(this.options.previewTemplate === null){
+        this.options.previewTemplate = this.createElement(`<div class="zap-file-details">
+                <img class="zap-file-thumb" />
+                <span class="zap-file-name"></span><br/>
+                <span class="zap-file-size"></span><br/>
+                <span class="zap-file-progress"></span>
+                <div class="zap-file-success-mark"><span>✔</span></div>
+                <div class="zap-file-error-mark"><span>✘</span></div>
+            </div>`);
+    }else if(typeof this.options.previewTemplate === 'string'){
+        this.options.previewTemplate = this.createElement(this.options.previewTemplate);
     }
-
     this.progressPercent = 0;
     this.uploadProgress = []
     this.fileNumber = 0;
@@ -97,8 +104,8 @@ function ZAPUploader(id,options){
     this.fileData = [];
     this.previewItems = [];
     this.inputFileElement = this.dropArea.querySelector('input[type=\'file\']');
-    this.messageContainer = (typeof this.options.messageContainer === 'string') ? this.dropArea.querySelector(this.options.messageContainer) : this.options.messageContainer;
-    this.previewContainer = (typeof this.options.previewContainer === 'string') ? document.querySelector(this.options.previewContainer) : this.options.previewContainer;
+    this.messageContainer = (this.options.messageContainer === null) ? this.dropArea.querySelector('.zap-message') : document.querySelector(this.options.messageContainer);
+    this.previewContainer = (this.options.previewContainer === null) ? this.dropArea.querySelector('.zap-preview') : document.querySelector(this.options.previewContainer);
     this.progressBar = this.dropArea.querySelector('.zap-progress-bar');
     const preventDefaults = function (e) {
         e.preventDefault();
@@ -210,7 +217,6 @@ ZAPUploader.prototype = {
         $this = this;
         //add file event
         this.options.addedfile({file:file,name:file.name,size:file.size},index);
-
         if(!this.previewContainer){
             return;
         }
@@ -303,6 +309,7 @@ ZAPUploader.prototype.clear = function () {
 }
 
 ZAPUploader.prototype.startUpload = function () {
+
     if(this.options.autoUpload){
         this.processQueue();
     }
@@ -313,7 +320,10 @@ ZAPUploader.prototype.processQueue = function () {
     this.uploadProgress = new Array(this.fileData.length)
     this.uploadProgress.fill(0);
     this.fileNumber = this.fileData.length;
+
+    console.log('processQueue',this.fileData.length,this.fileData)
     for (let i = 0; i < this.fileData.length; i++) {
+        console.log("process",this.fileData[i])
         this.uploadFile(this.fileData[i].file,i,this.fileData[i].path);
     }
 }

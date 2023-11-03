@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>ZAP Uploader</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css'
+          href="https://cdn.staticfile.org/twitter-bootstrap/5.3.2/css/bootstrap.min.css"/>
+    <link rel='stylesheet' type='text/css' href='../zapuploader.css'>
+    <script src='../zapuploader.js'></script>
+</head>
+<body>
+<div id="drop-area" class="zapUploader text-center drop3" >
+
+    <p>请选择要上传的图片</p>
+
+    <input type="file" id="uploader3" multiple accept="*">
+    <label class="btn btn-primary m-2" for="uploader3">选择图片</label>
+    <button class="btn btn-primary" onclick="upload.startUpload();">upload</button>
+    <div class="zap-message mb-2"></div>
+    <div class="progress zap-progress mb-2" style="display: none;height: 2px">
+        <div class="progress-bar zap-progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0"
+             aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+
+    <div class="zap-preview container" style="max-height: 400px;overflow-y: auto"  ></div>
+
+</div>
+
+
+<div class="zapUploader text-center drop2">
+
+    <p>请选择要上传的图片</p>
+
+    <input type="file" id="uploader2" multiple accept="image/*">
+    <label class="btn btn-primary m-2" for="uploader2">选择图片</label>
+    <div class="zap-message mb-2"></div>
+    <div class="progress zap-progress mb-2" style="display: none;height: 2px">
+        <div class="progress-bar zap-progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0"
+             aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <div class="zap-preview"></div>
+
+</div>
+
+
+<div class="zapUploader text-center drop1">
+
+    <p>请选择要上传的图片</p>
+
+    <input type="file" id="uploader1" multiple accept="*">
+    <label class="btn btn-primary m-2" for="uploader1">选择图片</label>
+    <div class="zap-message mb-2"></div>
+    <div class="progress zap-progress mb-2" style="display: none;height: 2px">
+        <div class="progress-bar zap-progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0"
+             aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+    <div class="zap-preview"></div>
+
+</div>
+
+
+<div class="zap-preview-template">
+    <div class="zap-file-details align-items-center row mb-2 bg-white border">
+
+        <div class="col-auto">
+            <div class="zap-thumbnails">
+                <img class="zap-file-thumb"/>
+            </div>
+        </div>
+        <div class="col align-items-center">
+            <span class="zap-file-name"></span><br/>
+            <span class="zap-file-size"></span><br/>
+            <span class="zap-file-progress"></span>
+            <div class="progress zap-none zap-progress" style="height: 2px">
+                <div class="progress-bar zap-file-progress" role="progressbar" aria-label="Basic example"
+                     aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+
+    </div>
+    <div class="zap-file-success-mark"><span>✔</span></div>
+    <div class="zap-file-error-mark"><span>✘</span></div>
+</div>
+
+
+<script>
+    var upload = new ZAPUploader('#drop-area', {
+        url: 'http://127.0.0.1/ZapUploader/tests/upload.php',
+        // allowedExtensions: '.jpg|.png|.jpeg',
+        // acceptedFiles: 'image/png,image/jpg,image/jpeg',
+        uploadMultiple: true,
+        skipInvalidFile: true,
+        preview: function (file) {
+            console.log(file);
+        },
+        previewTemplate: document.querySelector('.zap-preview-template'),
+        success: function (i, response) {
+            console.log(i, response)
+        },
+        processing: function (file) {
+            console.log("processing",file);
+        },
+        complete: function () {
+
+            console.log('complete');
+        },
+        progress: function (total, fileNumber, percent, ff) {
+            // ff.querySelector('.zap-file-size').innerHTML = '已完成' + percent.toFixed(2);
+        },
+        addfile: function () {
+            // console.log('addfile', this);
+        },
+        addedfile:function(file,index){
+            // console.log('addfile', file,index);
+        },
+        directoryUpload: true, //upload dir
+        // progress:function(percent){
+        //     $('.progress-bar').css('width',percent + '%');
+        // }
+    });
+</script>
+</body>
+</html>
