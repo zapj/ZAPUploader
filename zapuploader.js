@@ -17,7 +17,7 @@
 (function (window, document) {
     'use strict';
 
-    var VERSION = '2.0.0';
+    var VERSION = '2.0.1';
 
     /* ================================================================
      * 内置样式：首次实例化时自动注入 <style>，无需再引入 zapuploader.css
