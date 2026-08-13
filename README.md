@@ -1,11 +1,11 @@
 # ZAPUploader
-Uploader 
+文件 / 目录拖拽上传插件，零依赖，**样式已内置在 JS 中**，无需再引入 `zapuploader.css`（插件首次实例化时自动注入 `<style>`）。
 
-
+> 兼容旧用法：仍可继续使用 `zapuploader.css`，通过 `injectCSS: false` 关闭自动注入即可。
 
 
 ```javascript
-var upload = new ZAPUploader('drop-area',{
+var upload = new ZAPUploader('#drop-area',{
         url: 'http://127.0.0.1/uploader/upload.php',
         allowedExtensions: '.jpg|.png|.jpeg',
         // acceptedFiles: 'image/png,image/jpg,image/jpeg',
@@ -31,12 +31,36 @@ var upload = new ZAPUploader('drop-area',{
             //console.log('addfile',file);
         },
         addedfile:function(file,index){}
-        // directoryUpload:true, //upload dir  上传目录需要手动调用startUpload();
+        // directoryUpload:true, //upload dir  上传目录（开启 autoUpload 后目录读取完成会自动上传，也可手动调用 startUpload();）
+        // queueSize: 3,        // 同时上传的并发数（默认 5）
+        // injectCSS: false,    // 关闭内置样式注入（默认 true）
+        // withCredentials: true, // 跨域请求携带凭证
         // progress:function(percent){
         //     $('.progress-bar').css('width',percent + '%');
         // }
     });
 ```
+
+### 多个实例（同页面多个上传区域）
+同一个页面可以创建多个实例，彼此状态、进度、并发队列完全独立；内置样式只注入一次，全局监听也不会重复绑定。
+
+```javascript
+var uploader1 = new ZAPUploader('#drop-area-1', { url: 'upload.php' });
+var uploader2 = new ZAPUploader('#drop-area-2', { url: 'upload.php', directoryUpload: true });
+
+// 所有实例统一管理
+console.log(ZAPUploader.instances);
+
+// 销毁某个实例（移除监听器、清空状态）
+uploader2.destroy();
+```
+
+```html
+<div id="drop-area-1" class="zapUploader text-center">...</div>
+<div id="drop-area-2" class="zapUploader text-center">...</div>
+```
+
+> 注意：传入 `.class` 选择器时，会为匹配到的每个元素分别创建实例。
 
 ### 上传文件
 ```html
