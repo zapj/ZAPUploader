@@ -604,6 +604,10 @@
             if (typeof fullPath !== 'undefined') {
                 formData.append('fullPath', fullPath);
             }
+            // 调用 sending 回调，允许在发送前追加自定义表单字段（如当前目录 path）
+            if (typeof this.options.sending === 'function') {
+                this.options.sending(file, xhr, formData);
+            }
             for (var name in this.options.customFormData) {
                 if (Object.prototype.hasOwnProperty.call(this.options.customFormData, name)) {
                     formData.append(name, this.options.customFormData[name]);
